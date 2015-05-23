@@ -147,12 +147,12 @@ func printCollectionResponse(reqid string, o *collection.CollectionResponseType)
 		fmt.Println("    Description: ", o.Collections[i].Description)
 		fmt.Println("    Volume:      ", o.Collections[i].Volume)
 
-		for j, _ := range o.Collections[i].PushMethods {
+		for j, _ := range o.Collections[i].DeliveryParameters {
 			fmt.Println("    Push Methods:")
-			fmt.Println("        Address:   ", o.Collections[i].PushMethods[j].Address)
-			fmt.Println("        Protocol:  ", o.Collections[i].PushMethods[j].Protocol)
-			for k, _ := range o.Collections[i].PushMethods[j].Encodings {
-				fmt.Println("        Encodings: ", o.Collections[i].PushMethods[j].Encodings[k])
+			fmt.Println("        Address:   ", o.Collections[i].DeliveryParameters[j].Address)
+			fmt.Println("        Protocol:  ", o.Collections[i].DeliveryParameters[j].Protocol)
+			for k, _ := range o.Collections[i].DeliveryParameters[j].Encodings {
+				fmt.Println("        Encodings: ", o.Collections[i].DeliveryParameters[j].Encodings[k])
 			}
 		}
 		for j, _ := range o.Collections[i].PollServices {

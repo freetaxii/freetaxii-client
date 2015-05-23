@@ -30,10 +30,10 @@ func buildTaxiiHeaderJson(r *http.Request) {
 	r.Header.Add("Content-Type", `application/json`)
 
 	// Specifies which TAXII Message Bindings the requestor accepts in response.
-	r.Header.Add("X-Taxii-Accept", `urn:taxii.mitre.org:message:json:1.0`)
+	r.Header.Add("X-Taxii-Accept", `urn:taxii.mitre.org:message:json:1.1`)
 
 	// Specifies the TAXII Message Binding in which the entity body is formatted.
-	r.Header.Add("X-Taxii-Content-Type", `urn:taxii.mitre.org:message:json:1.0`)
+	r.Header.Add("X-Taxii-Content-Type", `urn:taxii.mitre.org:message:json:1.1`)
 
 	// Specifies which TAXII Protocol Binding is used for this message.
 	r.Header.Add("X-Taxii-Protocol", `urn:taxii.mitre.org:protocol:http:1.0`)
