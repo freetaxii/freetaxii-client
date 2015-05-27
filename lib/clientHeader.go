@@ -17,7 +17,7 @@ import (
 
 func buildTaxiiHeaderJson(r *http.Request) {
 
-	if iDebug >= 3 {
+	if DebugLevel >= 4 {
 		log.Println("DEBUG: Entering buildTaxiiHeaderJson")
 	}
 

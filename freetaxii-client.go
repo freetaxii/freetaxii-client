@@ -14,10 +14,14 @@ import (
 
 var sOptURL = getopt.StringLong("url", 'u', "http://test.freetaxii.com", "URL Address (ex. http://test.freetaxii.com)", "string")
 var sOptPort = getopt.StringLong("port", 'p', "8000", "Port Number (ex. 8000)", "string")
-var sOptCollectionPath = getopt.StringLong("collection-service", 0, "/services/collection", "Collection Service Directory (ex. /services/collection)", "string")
 var sOptDiscoveryPath = getopt.StringLong("discovery-service", 0, "/services/discovery", "Discovery Service Directory (ex. /services/discovery)", "string")
-var bOptCollection = getopt.BoolLong("collection", 'c', "Send Collection Reqeust")
-var bOptDiscovery = getopt.BoolLong("discovery", 'd', "Send Discovery Reqeust")
+var sOptCollectionPath = getopt.StringLong("collection-service", 0, "/services/collection", "Collection Service Directory (ex. /services/collection)", "string")
+var sOptPollPath = getopt.StringLong("poll-service", 0, "/services/poll", "Poll Service Directory (ex. /services/poll)", "string")
+
+var bOptDiscovery = getopt.BoolLong("discovery", 0, "Send Discovery Reqeust")
+var bOptCollection = getopt.BoolLong("collection", 0, "Send Collection Reqeust")
+var bOptPoll = getopt.BoolLong("poll", 0, "Send Poll Reqeust")
+
 var bOptHelp = getopt.BoolLong("help", 0, "Help")
 var bOptVer = getopt.BoolLong("version", 0, "Version")
 
@@ -47,6 +51,12 @@ func main() {
 	if *bOptCollection {
 		serverurl := lib.MakeServerUrl(*sOptURL, *sOptPort, *sOptCollectionPath)
 		requestId, rawResponseData := lib.SendCollectionRequest(serverurl)
+		lib.ProcessResponse(requestId, rawResponseData)
+	}
+
+	if *bOptPoll {
+		serverurl := lib.MakeServerUrl(*sOptURL, *sOptPort, *sOptPollPath)
+		requestId, rawResponseData := lib.SendPollRequest(serverurl)
 		lib.ProcessResponse(requestId, rawResponseData)
 	}
 }

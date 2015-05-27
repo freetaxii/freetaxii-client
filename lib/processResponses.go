@@ -10,6 +10,7 @@ import (
 	"encoding/json"
 	"github.com/freetaxii/libtaxii/collection"
 	"github.com/freetaxii/libtaxii/discovery"
+	"github.com/freetaxii/libtaxii/poll"
 	"github.com/freetaxii/libtaxii/status"
 	"log"
 )
@@ -20,7 +21,7 @@ import (
 
 func ProcessResponse(requestId string, rawResponseData []byte) {
 
-	if iDebug >= 3 {
+	if DebugLevel >= 4 {
 		log.Println("DEBUG: Entering processResponse")
 	}
 
@@ -43,7 +44,7 @@ func ProcessResponse(requestId string, rawResponseData []byte) {
 		log.Fatalln("Bad Response, unable to decode JSON message type")
 	}
 
-	if iDebug >= 1 {
+	if DebugLevel >= 1 {
 		for k, _ := range taxiiMessage {
 			log.Println("DEBUG: Found a JSON message type of", k)
 		}
@@ -77,6 +78,14 @@ func ProcessResponse(requestId string, rawResponseData []byte) {
 			log.Fatalln("Bad Response, unable to decode JSON message contents")
 		}
 		printCollectionResponse(requestId, responseObject.TaxiiMessage)
+
+	} else if _, ok := taxiiMessage["poll_response"]; ok {
+		var responseObject poll.TaxiiPollResponseType
+		err = json.Unmarshal(rawResponseData, &responseObject)
+		if err != nil {
+			log.Fatalln("Bad Response, unable to decode JSON message contents")
+		}
+		printPollResponse(requestId, responseObject.TaxiiMessage)
 
 	} else {
 		log.Fatalln("Server did not respond with a valid TAXII Message")

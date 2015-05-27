@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"github.com/freetaxii/libtaxii/collection"
 	"github.com/freetaxii/libtaxii/discovery"
+	"github.com/freetaxii/libtaxii/poll"
 	"github.com/freetaxii/libtaxii/status"
 	"log"
 )
@@ -20,7 +21,7 @@ import (
 
 func PrintOutputHeader() {
 
-	if iDebug >= 3 {
+	if DebugLevel >= 4 {
 		log.Println("DEBUG: Entering printOutputHeader")
 	}
 
@@ -37,7 +38,7 @@ func PrintOutputHeader() {
 
 func printStatusMessage(reqid string, o *status.StatusMessageType) {
 
-	if iDebug >= 3 {
+	if DebugLevel >= 4 {
 		log.Println("DEBUG: Entering printStatusMessage")
 	}
 
@@ -59,7 +60,9 @@ func printStatusMessage(reqid string, o *status.StatusMessageType) {
 	if o.Details != nil {
 		fmt.Println("Details:")
 		for k, v := range o.Details {
-			fmt.Println("    ", k, " = ", v)
+			if v != "" {
+				fmt.Println("    ", k, " = ", v)
+			}
 		}
 	}
 	if o.Message != "" {
@@ -73,7 +76,7 @@ func printStatusMessage(reqid string, o *status.StatusMessageType) {
 
 func printDiscoveryResponse(reqid string, o *discovery.DiscoveryResponseType) {
 
-	if iDebug >= 3 {
+	if DebugLevel >= 4 {
 		log.Println("DEBUG: Entering printDiscoveryResponse")
 	}
 
@@ -120,7 +123,7 @@ func printDiscoveryResponse(reqid string, o *discovery.DiscoveryResponseType) {
 
 func printCollectionResponse(reqid string, o *collection.CollectionResponseType) {
 
-	if iDebug >= 3 {
+	if DebugLevel >= 4 {
 		log.Println("DEBUG: Entering printCollectionResponse")
 	}
 
@@ -179,6 +182,59 @@ func printCollectionResponse(reqid string, o *collection.CollectionResponseType)
 			for k, _ := range o.Collections[i].InboxServices[j].Encodings {
 				fmt.Println("        Encodings: ", o.Collections[i].InboxServices[j].Encodings[k])
 			}
+		}
+	}
+}
+
+// --------------------------------------------------
+// Print the Poll Response
+// --------------------------------------------------
+
+func printPollResponse(reqid string, o *poll.PollResponseType) {
+
+	if DebugLevel >= 4 {
+		log.Println("DEBUG: Entering printPollResponse")
+	}
+
+	PrintOutputHeader()
+	fmt.Println("Request")
+	fmt.Println("--------------------------------------------------")
+	fmt.Println("Message Type:   poll_request")
+	fmt.Println("Message ID:    ", reqid)
+	fmt.Println("\n\n")
+
+	fmt.Println("Response")
+	fmt.Println("--------------------------------------------------")
+	fmt.Println("Message Type:     poll_response")
+	fmt.Println("Message ID:      ", o.Id)
+	fmt.Println("Response ID:     ", o.InResponseTo)
+	fmt.Println("Collection Name: ", o.CollectionName)
+	fmt.Println("More:            ", o.More)
+	fmt.Println("Result ID:       ", o.ResultId)
+	fmt.Println("Result Part #:   ", o.ResultPartNumber)
+	if o.SubscriptionId != "" {
+		fmt.Println("Subscription ID: ", o.SubscriptionId)
+	}
+	if o.BeginTimestamp != "" {
+		fmt.Println("Begin Timestamp: ", o.BeginTimestamp)
+	}
+	if o.EndTimestamp != "" {
+		fmt.Println("End Timestamp:   ", o.EndTimestamp)
+	}
+	fmt.Println("Record Count:    ", o.RecordCount)
+	fmt.Println("Partial Count:   ", o.PartialCount)
+	if o.Message != "" {
+		fmt.Println("Message:         ", o.Message)
+	}
+
+	for i, _ := range o.ContentBlocks {
+		fmt.Println("")
+		fmt.Println("    === Content ===")
+		fmt.Println("    Content Encoding: ", o.ContentBlocks[i].ContentEncoding)
+		fmt.Println("    Content:          ", o.ContentBlocks[i].Content)
+		fmt.Println("    Timestamp:        ", o.ContentBlocks[i].TimestampLabel)
+		if o.ContentBlocks[i].Message != "" {
+			fmt.Println("    Message:          ", o.ContentBlocks[i].Message)
 		}
 	}
 }

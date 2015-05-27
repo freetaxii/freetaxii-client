@@ -6,10 +6,11 @@
 
 package lib
 
-// Debug Level 1 = basic debugging information
-// Debug Level 3 = Method / Functional walk
+// Debug Level 1 = basic logging information
+// Debug Level 3 = detailed debugging information
+// Debug Level 4 = Function walk
 // Debug Level 5 = RAW packet/message output
-var iDebug = 0
+var DebugLevel = 0
 
 var sVersion = "0.2"
 

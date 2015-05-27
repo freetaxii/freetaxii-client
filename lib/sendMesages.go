@@ -11,6 +11,7 @@ import (
 	"encoding/json"
 	"github.com/freetaxii/libtaxii/collection"
 	"github.com/freetaxii/libtaxii/discovery"
+	"github.com/freetaxii/libtaxii/poll"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -22,7 +23,7 @@ import (
 
 func SendDiscoveryRequest(serverurl string) (string, []byte) {
 
-	if iDebug >= 3 {
+	if DebugLevel >= 4 {
 		log.Println("DEBUG: Entering sendDiscoveryRequest")
 	}
 
@@ -31,7 +32,7 @@ func SendDiscoveryRequest(serverurl string) (string, []byte) {
 	// --------------------------------------------------
 	// Create Discovery Request Message
 	// --------------------------------------------------
-	requestObject, _ := discovery.NewRequest()
+	requestObject := discovery.NewRequest()
 	msgToSend, err := json.Marshal(requestObject)
 	if err != nil {
 		// If we can not create a valid message then there is something
@@ -49,7 +50,7 @@ func SendDiscoveryRequest(serverurl string) (string, []byte) {
 
 func SendCollectionRequest(serverurl string) (string, []byte) {
 
-	if iDebug >= 3 {
+	if DebugLevel >= 4 {
 		log.Println("DEBUG: Entering sendCollectionRequest")
 	}
 
@@ -58,7 +59,39 @@ func SendCollectionRequest(serverurl string) (string, []byte) {
 	// --------------------------------------------------
 	// Create Discovery Request Message
 	// --------------------------------------------------
-	requestObject, _ := collection.NewRequest()
+	requestObject := collection.NewRequest()
+	msgToSend, err := json.Marshal(requestObject)
+	if err != nil {
+		// If we can not create a valid message then there is something
+		// wrong with the APIs and nothing is going to work.
+		log.Fatalln("Unable to create Collection Request Message")
+	}
+
+	rawResponseData := sendTaxiiMessage(serverurl, msgToSend)
+	return requestObject.TaxiiMessage.Id, rawResponseData
+}
+
+// --------------------------------------------------
+// Send Poll Request Message to Server
+// --------------------------------------------------
+
+func SendPollRequest(serverurl string) (string, []byte) {
+
+	if DebugLevel >= 4 {
+		log.Println("DEBUG: Entering sendPollRequest")
+	}
+
+	var err error
+
+	// --------------------------------------------------
+	// Create Discovery Request Message
+	// --------------------------------------------------
+	requestObject := poll.NewRequest()
+	requestObject.AddCollectionName("Watch-list")
+	pp := poll.CreatePollParameters()
+	pp.SetContentEncodingToJson()
+	requestObject.AddPollParameters(pp)
+
 	msgToSend, err := json.Marshal(requestObject)
 	if err != nil {
 		// If we can not create a valid message then there is something
@@ -76,7 +109,7 @@ func SendCollectionRequest(serverurl string) (string, []byte) {
 
 func sendTaxiiMessage(serverurl string, msgToSend []byte) []byte {
 
-	if iDebug >= 3 {
+	if DebugLevel >= 4 {
 		log.Println("DEBUG: Entering sendTaxiiMessage")
 	}
 
@@ -109,7 +142,7 @@ func sendTaxiiMessage(serverurl string, msgToSend []byte) []byte {
 		log.Fatalf("%s", err)
 	}
 
-	if iDebug >= 5 {
+	if DebugLevel >= 5 {
 		log.Println("DEBUG: Raw HTTP Response Data", string(rawInboundData))
 	}
 
