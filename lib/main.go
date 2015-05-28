@@ -12,7 +12,7 @@ package lib
 // Debug Level 5 = RAW packet/message output
 var DebugLevel = 0
 
-var sVersion = "0.2"
+var sVersion = "0.2.1"
 
 func MakeServerUrl(url, port, path string) string {
 	return url + ":" + port + path

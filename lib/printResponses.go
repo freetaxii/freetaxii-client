@@ -232,7 +232,9 @@ func printPollResponse(reqid string, o *poll.PollResponseType) {
 		fmt.Println("    === Content ===")
 		fmt.Println("    Content Encoding: ", o.ContentBlocks[i].ContentEncoding)
 		fmt.Println("    Content:          ", o.ContentBlocks[i].Content)
-		fmt.Println("    Timestamp:        ", o.ContentBlocks[i].TimestampLabel)
+		if o.ContentBlocks[i].TimestampLabel != "" {
+			fmt.Println("    Timestamp:        ", o.ContentBlocks[i].TimestampLabel)
+		}
 		if o.ContentBlocks[i].Message != "" {
 			fmt.Println("    Message:          ", o.ContentBlocks[i].Message)
 		}

@@ -75,7 +75,7 @@ func SendCollectionRequest(serverurl string) (string, []byte) {
 // Send Poll Request Message to Server
 // --------------------------------------------------
 
-func SendPollRequest(serverurl string) (string, []byte) {
+func SendPollRequest(serverurl, collectionName string) (string, []byte) {
 
 	if DebugLevel >= 4 {
 		log.Println("DEBUG: Entering sendPollRequest")
@@ -87,7 +87,7 @@ func SendPollRequest(serverurl string) (string, []byte) {
 	// Create Discovery Request Message
 	// --------------------------------------------------
 	requestObject := poll.NewRequest()
-	requestObject.AddCollectionName("Watch-list")
+	requestObject.AddCollectionName(collectionName)
 	pp := poll.CreatePollParameters()
 	pp.SetContentEncodingToJson()
 	requestObject.AddPollParameters(pp)

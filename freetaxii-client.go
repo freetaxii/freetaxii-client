@@ -16,6 +16,7 @@ var sOptURL = getopt.StringLong("url", 'u', "http://test.freetaxii.com", "URL Ad
 var sOptPort = getopt.StringLong("port", 'p', "8000", "Port Number (ex. 8000)", "string")
 var sOptDiscoveryPath = getopt.StringLong("discovery-service", 0, "/services/discovery", "Discovery Service Directory (ex. /services/discovery)", "string")
 var sOptCollectionPath = getopt.StringLong("collection-service", 0, "/services/collection", "Collection Service Directory (ex. /services/collection)", "string")
+var sOptCollectionName = getopt.StringLong("poll-collection-name", 0, "", "Poll Collection Name (required)", "string")
 var sOptPollPath = getopt.StringLong("poll-service", 0, "/services/poll", "Poll Service Directory (ex. /services/poll)", "string")
 
 var bOptDiscovery = getopt.BoolLong("discovery", 0, "Send Discovery Reqeust")
@@ -26,20 +27,17 @@ var bOptHelp = getopt.BoolLong("help", 0, "Help")
 var bOptVer = getopt.BoolLong("version", 0, "Version")
 
 func main() {
-	getopt.HelpColumn = 35
+	getopt.HelpColumn = 40
 	getopt.DisplayWidth = 120
 	getopt.SetParameters("")
 	getopt.Parse()
 
 	if *bOptVer {
-		lib.PrintOutputHeader()
-		os.Exit(0)
+		printVersion()
 	}
 
 	if *bOptHelp {
-		lib.PrintOutputHeader()
-		getopt.Usage()
-		os.Exit(0)
+		printHelp()
 	}
 
 	if *bOptDiscovery {
@@ -55,8 +53,22 @@ func main() {
 	}
 
 	if *bOptPoll {
+		if *sOptCollectionName == "" {
+			printHelp()
+		}
 		serverurl := lib.MakeServerUrl(*sOptURL, *sOptPort, *sOptPollPath)
-		requestId, rawResponseData := lib.SendPollRequest(serverurl)
+		requestId, rawResponseData := lib.SendPollRequest(serverurl, *sOptCollectionName)
 		lib.ProcessResponse(requestId, rawResponseData)
 	}
+}
+
+func printVersion() {
+	lib.PrintOutputHeader()
+	os.Exit(0)
+}
+
+func printHelp() {
+	lib.PrintOutputHeader()
+	getopt.Usage()
+	os.Exit(0)
 }
