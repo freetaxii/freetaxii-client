@@ -42,14 +42,14 @@ func main() {
 
 	if *bOptDiscovery {
 		serverurl := lib.MakeServerUrl(*sOptURL, *sOptPort, *sOptDiscoveryPath)
-		requestId, rawResponseData := lib.SendDiscoveryRequest(serverurl)
-		lib.ProcessResponse(requestId, rawResponseData)
+		requestId, requestType, rawResponseData := lib.SendDiscoveryRequest(serverurl)
+		lib.ProcessResponse(requestId, requestType, rawResponseData)
 	}
 
 	if *bOptCollection {
 		serverurl := lib.MakeServerUrl(*sOptURL, *sOptPort, *sOptCollectionPath)
-		requestId, rawResponseData := lib.SendCollectionRequest(serverurl)
-		lib.ProcessResponse(requestId, rawResponseData)
+		requestId, requestType, rawResponseData := lib.SendCollectionRequest(serverurl)
+		lib.ProcessResponse(requestId, requestType, rawResponseData)
 	}
 
 	if *bOptPoll {
@@ -57,8 +57,8 @@ func main() {
 			printHelp()
 		}
 		serverurl := lib.MakeServerUrl(*sOptURL, *sOptPort, *sOptPollPath)
-		requestId, rawResponseData := lib.SendPollRequest(serverurl, *sOptCollectionName)
-		lib.ProcessResponse(requestId, rawResponseData)
+		requestId, requestType, rawResponseData := lib.SendPollRequest(serverurl, *sOptCollectionName)
+		lib.ProcessResponse(requestId, requestType, rawResponseData)
 	}
 }
 

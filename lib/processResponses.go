@@ -8,35 +8,36 @@ package lib
 
 import (
 	"encoding/json"
-	"github.com/freetaxii/libtaxii/collection"
-	"github.com/freetaxii/libtaxii/discovery"
-	"github.com/freetaxii/libtaxii/poll"
-	"github.com/freetaxii/libtaxii/status"
+	"github.com/freetaxii/libtaxii/collectionMessage"
+	"github.com/freetaxii/libtaxii/discoveryMessage"
+	"github.com/freetaxii/libtaxii/pollMessage"
+	"github.com/freetaxii/libtaxii/statusMessage"
 	"log"
 )
+
+type ResponseMessageType struct {
+	MessageType string `json:"message_type,omitempty"`
+}
 
 // --------------------------------------------------
 // Process Response Data from Server
 // --------------------------------------------------
 
-func ProcessResponse(requestId string, rawResponseData []byte) {
+func ProcessResponse(requestId, requestType string, rawResponseData []byte) {
 
 	if DebugLevel >= 4 {
-		log.Println("DEBUG: Entering processResponse")
+		log.Println("DEBUG-4: Entering processResponse")
 	}
 
 	// --------------------------------------------------
 	// Figure out which TAXII message
 	// --------------------------------------------------
 	// First thing we need to do is figure out what type of message we got back
-	// The two options are:
-	// 		Discovery Response
-	// 		Status Message (aka error message)
 
 	var err error
 
-	// Build a simple map for the first pass at looking at the message
-	taxiiMessage := make(map[string]interface{})
+	//taxiiMessage := make(map[string]interface{})
+	var taxiiMessage ResponseMessageType
 
 	// Unmarshal the JSON to the map we just defined
 	err = json.Unmarshal(rawResponseData, &taxiiMessage)
@@ -45,9 +46,7 @@ func ProcessResponse(requestId string, rawResponseData []byte) {
 	}
 
 	if DebugLevel >= 1 {
-		for k, _ := range taxiiMessage {
-			log.Println("DEBUG: Found a JSON message type of", k)
-		}
+		log.Println("DEBUG-1: Found a JSON message type of", taxiiMessage.MessageType)
 	}
 
 	// --------------------------------------------------
@@ -55,39 +54,39 @@ func ProcessResponse(requestId string, rawResponseData []byte) {
 	// --------------------------------------------------
 	// Now that we know what type of message we got back, lets process it
 
-	if _, ok := taxiiMessage["discovery_response"]; ok {
-		var responseObject discovery.TaxiiDiscoveryResponseType
+	if taxiiMessage.MessageType == "discovery_response" {
+		var responseObject discoveryMessage.DiscoveryResponseMessageType
 		err = json.Unmarshal(rawResponseData, &responseObject)
 		if err != nil {
 			log.Fatalln("Bad Response, unable to decode JSON message contents")
 		}
-		printDiscoveryResponse(requestId, responseObject.TaxiiMessage)
+		printDiscoveryResponse(requestId, requestType, responseObject)
 
-	} else if _, ok := taxiiMessage["status_message"]; ok {
-		var statusObject status.TaxiiStatusMessageType
+	} else if taxiiMessage.MessageType == "status_message" {
+		var statusObject statusMessage.StatusMessageType
 		err = json.Unmarshal(rawResponseData, &statusObject)
 		if err != nil {
 			log.Fatalln("Bad Response, unable to decode JSON message contents")
 		}
-		printStatusMessage(requestId, statusObject.TaxiiMessage)
+		printStatusMessage(requestId, requestType, statusObject)
 
-	} else if _, ok := taxiiMessage["collection_information_response"]; ok {
-		var responseObject collection.TaxiiCollectionResponseType
+	} else if taxiiMessage.MessageType == "collection_information_response" {
+		var responseObject collectionMessage.CollectionResponseMessageType
 		err = json.Unmarshal(rawResponseData, &responseObject)
 		if err != nil {
 			log.Fatalln("Bad Response, unable to decode JSON message contents")
 		}
-		printCollectionResponse(requestId, responseObject.TaxiiMessage)
+		printCollectionResponse(requestId, requestType, responseObject)
 
-	} else if _, ok := taxiiMessage["poll_response"]; ok {
-		var responseObject poll.TaxiiPollResponseType
+	} else if taxiiMessage.MessageType == "poll_response" {
+		var responseObject pollMessage.PollResponseMessageType
 		err = json.Unmarshal(rawResponseData, &responseObject)
 		if err != nil {
 			log.Fatalln("Bad Response, unable to decode JSON message contents")
 		}
-		printPollResponse(requestId, responseObject.TaxiiMessage)
+		printPollResponse(requestId, requestType, responseObject)
 
 	} else {
-		log.Fatalln("Server did not respond with a valid TAXII Message")
+		log.Fatalln("Server did not respond with a valid TAXII Message, message type was", taxiiMessage.MessageType)
 	}
 }

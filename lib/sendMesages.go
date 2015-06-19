@@ -9,9 +9,9 @@ package lib
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/freetaxii/libtaxii/collection"
-	"github.com/freetaxii/libtaxii/discovery"
-	"github.com/freetaxii/libtaxii/poll"
+	"github.com/freetaxii/libtaxii/collectionMessage"
+	"github.com/freetaxii/libtaxii/discoveryMessage"
+	"github.com/freetaxii/libtaxii/pollMessage"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -21,10 +21,10 @@ import (
 // Send Discovery Request Message to Server
 // --------------------------------------------------
 
-func SendDiscoveryRequest(serverurl string) (string, []byte) {
+func SendDiscoveryRequest(serverurl string) (string, string, []byte) {
 
 	if DebugLevel >= 4 {
-		log.Println("DEBUG: Entering sendDiscoveryRequest")
+		log.Println("DEBUG-4: Entering SendDiscoveryRequest")
 	}
 
 	var err error
@@ -32,7 +32,7 @@ func SendDiscoveryRequest(serverurl string) (string, []byte) {
 	// --------------------------------------------------
 	// Create Discovery Request Message
 	// --------------------------------------------------
-	requestObject := discovery.NewRequest()
+	requestObject := discoveryMessage.NewRequest()
 	msgToSend, err := json.Marshal(requestObject)
 	if err != nil {
 		// If we can not create a valid message then there is something
@@ -41,17 +41,17 @@ func SendDiscoveryRequest(serverurl string) (string, []byte) {
 	}
 
 	rawResponseData := sendTaxiiMessage(serverurl, msgToSend)
-	return requestObject.TaxiiMessage.Id, rawResponseData
+	return requestObject.Id, requestObject.MessageType, rawResponseData
 }
 
 // --------------------------------------------------
 // Send Collection Request Message to Server
 // --------------------------------------------------
 
-func SendCollectionRequest(serverurl string) (string, []byte) {
+func SendCollectionRequest(serverurl string) (string, string, []byte) {
 
 	if DebugLevel >= 4 {
-		log.Println("DEBUG: Entering sendCollectionRequest")
+		log.Println("DEBUG-4: Entering SendCollectionRequest")
 	}
 
 	var err error
@@ -59,7 +59,7 @@ func SendCollectionRequest(serverurl string) (string, []byte) {
 	// --------------------------------------------------
 	// Create Discovery Request Message
 	// --------------------------------------------------
-	requestObject := collection.NewRequest()
+	requestObject := collectionMessage.NewRequest()
 	msgToSend, err := json.Marshal(requestObject)
 	if err != nil {
 		// If we can not create a valid message then there is something
@@ -68,17 +68,17 @@ func SendCollectionRequest(serverurl string) (string, []byte) {
 	}
 
 	rawResponseData := sendTaxiiMessage(serverurl, msgToSend)
-	return requestObject.TaxiiMessage.Id, rawResponseData
+	return requestObject.Id, requestObject.MessageType, rawResponseData
 }
 
 // --------------------------------------------------
 // Send Poll Request Message to Server
 // --------------------------------------------------
 
-func SendPollRequest(serverurl, collectionName string) (string, []byte) {
+func SendPollRequest(serverurl, collectionName string) (string, string, []byte) {
 
 	if DebugLevel >= 4 {
-		log.Println("DEBUG: Entering sendPollRequest")
+		log.Println("DEBUG-4: Entering SendPollRequest")
 	}
 
 	var err error
@@ -86,11 +86,10 @@ func SendPollRequest(serverurl, collectionName string) (string, []byte) {
 	// --------------------------------------------------
 	// Create Discovery Request Message
 	// --------------------------------------------------
-	requestObject := poll.NewRequest()
+	requestObject := pollMessage.NewRequest()
 	requestObject.AddCollectionName(collectionName)
-	pp := poll.CreatePollParameters()
+	pp := requestObject.NewPollParameters()
 	pp.SetContentEncodingToJson()
-	requestObject.AddPollParameters(pp)
 
 	msgToSend, err := json.Marshal(requestObject)
 	if err != nil {
@@ -100,7 +99,7 @@ func SendPollRequest(serverurl, collectionName string) (string, []byte) {
 	}
 
 	rawResponseData := sendTaxiiMessage(serverurl, msgToSend)
-	return requestObject.TaxiiMessage.Id, rawResponseData
+	return requestObject.Id, requestObject.MessageType, rawResponseData
 }
 
 // --------------------------------------------------

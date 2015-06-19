@@ -8,10 +8,10 @@ package lib
 
 import (
 	"fmt"
-	"github.com/freetaxii/libtaxii/collection"
-	"github.com/freetaxii/libtaxii/discovery"
-	"github.com/freetaxii/libtaxii/poll"
-	"github.com/freetaxii/libtaxii/status"
+	"github.com/freetaxii/libtaxii/collectionMessage"
+	"github.com/freetaxii/libtaxii/discoveryMessage"
+	"github.com/freetaxii/libtaxii/pollMessage"
+	"github.com/freetaxii/libtaxii/statusMessage"
 	"log"
 )
 
@@ -36,22 +36,22 @@ func PrintOutputHeader() {
 // Print the Status Message
 // --------------------------------------------------
 
-func printStatusMessage(reqid string, o *status.StatusMessageType) {
+func printStatusMessage(reqid, messageType string, o statusMessage.StatusMessageType) {
 
 	if DebugLevel >= 4 {
-		log.Println("DEBUG: Entering printStatusMessage")
+		log.Println("DEBUG-4: Entering printStatusMessage")
 	}
 
 	PrintOutputHeader()
 	fmt.Println("Request")
 	fmt.Println("--------------------------------------------------")
-	fmt.Println("Message Type:   discovery_request")
+	fmt.Println("Message Type:  ", messageType)
 	fmt.Println("Message ID:    ", reqid)
 	fmt.Println("\n\n")
 
 	fmt.Println("Response")
 	fmt.Println("--------------------------------------------------")
-	fmt.Println("Message Type:   status_message")
+	fmt.Println("Message Type:  ", o.MessageType)
 	fmt.Println("Message ID:    ", o.Id)
 	if o.InResponseTo != "" {
 		fmt.Println("Response ID:   ", o.InResponseTo)
@@ -74,7 +74,7 @@ func printStatusMessage(reqid string, o *status.StatusMessageType) {
 // Print the Discovery Response
 // --------------------------------------------------
 
-func printDiscoveryResponse(reqid string, o *discovery.DiscoveryResponseType) {
+func printDiscoveryResponse(reqid, messageType string, o discoveryMessage.DiscoveryResponseMessageType) {
 
 	if DebugLevel >= 4 {
 		log.Println("DEBUG: Entering printDiscoveryResponse")
@@ -83,13 +83,13 @@ func printDiscoveryResponse(reqid string, o *discovery.DiscoveryResponseType) {
 	PrintOutputHeader()
 	fmt.Println("Request")
 	fmt.Println("--------------------------------------------------")
-	fmt.Println("Message Type:   discovery_request")
+	fmt.Println("Message Type:  ", messageType)
 	fmt.Println("Message ID:    ", reqid)
 	fmt.Println("\n\n")
 
 	fmt.Println("Response")
 	fmt.Println("--------------------------------------------------")
-	fmt.Println("Message Type:   discovery_response")
+	fmt.Println("Message Type:  ", o.MessageType)
 	fmt.Println("Message ID:    ", o.Id)
 	fmt.Println("Response ID:   ", o.InResponseTo)
 
@@ -121,7 +121,7 @@ func printDiscoveryResponse(reqid string, o *discovery.DiscoveryResponseType) {
 // Print the Collection Response
 // --------------------------------------------------
 
-func printCollectionResponse(reqid string, o *collection.CollectionResponseType) {
+func printCollectionResponse(reqid, messageType string, o collectionMessage.CollectionResponseMessageType) {
 
 	if DebugLevel >= 4 {
 		log.Println("DEBUG: Entering printCollectionResponse")
@@ -130,13 +130,13 @@ func printCollectionResponse(reqid string, o *collection.CollectionResponseType)
 	PrintOutputHeader()
 	fmt.Println("Request")
 	fmt.Println("--------------------------------------------------")
-	fmt.Println("Message Type:   collection_information_request")
+	fmt.Println("Message Type:  ", messageType)
 	fmt.Println("Message ID:    ", reqid)
 	fmt.Println("\n\n")
 
 	fmt.Println("Response")
 	fmt.Println("--------------------------------------------------")
-	fmt.Println("Message Type:   collection_information_response")
+	fmt.Println("Message Type:  ", o.MessageType)
 	fmt.Println("Message ID:    ", o.Id)
 	fmt.Println("Response ID:   ", o.InResponseTo)
 
@@ -190,7 +190,7 @@ func printCollectionResponse(reqid string, o *collection.CollectionResponseType)
 // Print the Poll Response
 // --------------------------------------------------
 
-func printPollResponse(reqid string, o *poll.PollResponseType) {
+func printPollResponse(reqid, messageType string, o pollMessage.PollResponseMessageType) {
 
 	if DebugLevel >= 4 {
 		log.Println("DEBUG: Entering printPollResponse")
@@ -199,13 +199,13 @@ func printPollResponse(reqid string, o *poll.PollResponseType) {
 	PrintOutputHeader()
 	fmt.Println("Request")
 	fmt.Println("--------------------------------------------------")
-	fmt.Println("Message Type:   poll_request")
+	fmt.Println("Message Type:  ", messageType)
 	fmt.Println("Message ID:    ", reqid)
 	fmt.Println("\n\n")
 
 	fmt.Println("Response")
 	fmt.Println("--------------------------------------------------")
-	fmt.Println("Message Type:     poll_response")
+	fmt.Println("Message Type:    ", o.MessageType)
 	fmt.Println("Message ID:      ", o.Id)
 	fmt.Println("Response ID:     ", o.InResponseTo)
 	fmt.Println("Collection Name: ", o.CollectionName)
@@ -231,7 +231,7 @@ func printPollResponse(reqid string, o *poll.PollResponseType) {
 		fmt.Println("")
 		fmt.Println("    === Content ===")
 		fmt.Println("    Content Encoding: ", o.ContentBlocks[i].ContentEncoding)
-		fmt.Println("    Content:          ", o.ContentBlocks[i].Content)
+		fmt.Println("    Content:\n", o.ContentBlocks[i].Content)
 		if o.ContentBlocks[i].TimestampLabel != "" {
 			fmt.Println("    Timestamp:        ", o.ContentBlocks[i].TimestampLabel)
 		}
