@@ -22,11 +22,6 @@ import (
 // --------------------------------------------------
 
 func SendDiscoveryRequest(serverurl string) (string, string, []byte) {
-
-	if DebugLevel >= 4 {
-		log.Println("DEBUG-4: Entering SendDiscoveryRequest")
-	}
-
 	var err error
 
 	// --------------------------------------------------
@@ -41,6 +36,7 @@ func SendDiscoveryRequest(serverurl string) (string, string, []byte) {
 	}
 
 	rawResponseData := sendTaxiiMessage(serverurl, msgToSend)
+
 	return requestObject.Id, requestObject.MessageType, rawResponseData
 }
 
@@ -49,11 +45,6 @@ func SendDiscoveryRequest(serverurl string) (string, string, []byte) {
 // --------------------------------------------------
 
 func SendCollectionRequest(serverurl string) (string, string, []byte) {
-
-	if DebugLevel >= 4 {
-		log.Println("DEBUG-4: Entering SendCollectionRequest")
-	}
-
 	var err error
 
 	// --------------------------------------------------
@@ -76,11 +67,6 @@ func SendCollectionRequest(serverurl string) (string, string, []byte) {
 // --------------------------------------------------
 
 func SendPollRequest(serverurl, collectionName string) (string, string, []byte) {
-
-	if DebugLevel >= 4 {
-		log.Println("DEBUG-4: Entering SendPollRequest")
-	}
-
 	var err error
 
 	// --------------------------------------------------
@@ -107,10 +93,6 @@ func SendPollRequest(serverurl, collectionName string) (string, string, []byte) 
 // --------------------------------------------------
 
 func sendTaxiiMessage(serverurl string, msgToSend []byte) []byte {
-
-	if DebugLevel >= 4 {
-		log.Println("DEBUG: Entering sendTaxiiMessage")
-	}
 
 	// --------------------------------------------------
 	// Create http web client

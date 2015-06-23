@@ -16,8 +16,8 @@ var sOptURL = getopt.StringLong("url", 'u', "http://test.freetaxii.com", "URL Ad
 var sOptPort = getopt.StringLong("port", 'p', "8000", "Port Number (ex. 8000)", "string")
 var sOptDiscoveryPath = getopt.StringLong("discovery-service", 0, "/services/discovery", "Discovery Service Directory (ex. /services/discovery)", "string")
 var sOptCollectionPath = getopt.StringLong("collection-service", 0, "/services/collection", "Collection Service Directory (ex. /services/collection)", "string")
-var sOptCollectionName = getopt.StringLong("poll-collection-name", 0, "", "Poll Collection Name (required)", "string")
 var sOptPollPath = getopt.StringLong("poll-service", 0, "/services/poll", "Poll Service Directory (ex. /services/poll)", "string")
+var sOptPollCollectionName = getopt.StringLong("poll-collection-name", 0, "", "Poll Collection Name (required)", "string")
 
 var bOptDiscovery = getopt.BoolLong("discovery", 0, "Send Discovery Reqeust")
 var bOptCollection = getopt.BoolLong("collection", 0, "Send Collection Reqeust")
@@ -53,11 +53,11 @@ func main() {
 	}
 
 	if *bOptPoll {
-		if *sOptCollectionName == "" {
+		if *sOptPollCollectionName == "" {
 			printHelp()
 		}
 		serverurl := lib.MakeServerUrl(*sOptURL, *sOptPort, *sOptPollPath)
-		requestId, requestType, rawResponseData := lib.SendPollRequest(serverurl, *sOptCollectionName)
+		requestId, requestType, rawResponseData := lib.SendPollRequest(serverurl, *sOptPollCollectionName)
 		lib.ProcessResponse(requestId, requestType, rawResponseData)
 	}
 }

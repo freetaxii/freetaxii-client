@@ -7,7 +7,6 @@
 package lib
 
 import (
-	"log"
 	"net/http"
 )
 
@@ -16,10 +15,6 @@ import (
 // --------------------------------------------------
 
 func buildTaxiiHeaderJson(r *http.Request) {
-
-	if DebugLevel >= 4 {
-		log.Println("DEBUG: Entering buildTaxiiHeaderJson")
-	}
 
 	r.Header.Add("User-Agent", `freetaxii.httpClient`)
 

@@ -25,10 +25,6 @@ type ResponseMessageType struct {
 
 func ProcessResponse(requestId, requestType string, rawResponseData []byte) {
 
-	if DebugLevel >= 4 {
-		log.Println("DEBUG-4: Entering processResponse")
-	}
-
 	// --------------------------------------------------
 	// Figure out which TAXII message
 	// --------------------------------------------------

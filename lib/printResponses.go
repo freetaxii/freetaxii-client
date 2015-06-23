@@ -12,7 +12,6 @@ import (
 	"github.com/freetaxii/libtaxii/messages/discoveryMessage"
 	"github.com/freetaxii/libtaxii/messages/pollMessage"
 	"github.com/freetaxii/libtaxii/messages/statusMessage"
-	"log"
 )
 
 // --------------------------------------------------
@@ -20,10 +19,6 @@ import (
 // --------------------------------------------------
 
 func PrintOutputHeader() {
-
-	if DebugLevel >= 4 {
-		log.Println("DEBUG: Entering printOutputHeader")
-	}
 
 	fmt.Println("")
 	fmt.Println("FreeTAXII Client")
@@ -37,10 +32,6 @@ func PrintOutputHeader() {
 // --------------------------------------------------
 
 func printStatusMessage(reqid, messageType string, o statusMessage.StatusMessageType) {
-
-	if DebugLevel >= 4 {
-		log.Println("DEBUG-4: Entering printStatusMessage")
-	}
 
 	PrintOutputHeader()
 	fmt.Println("Request")
@@ -75,10 +66,6 @@ func printStatusMessage(reqid, messageType string, o statusMessage.StatusMessage
 // --------------------------------------------------
 
 func printDiscoveryResponse(reqid, messageType string, o discoveryMessage.DiscoveryResponseMessageType) {
-
-	if DebugLevel >= 4 {
-		log.Println("DEBUG: Entering printDiscoveryResponse")
-	}
 
 	PrintOutputHeader()
 	fmt.Println("Request")
@@ -122,10 +109,6 @@ func printDiscoveryResponse(reqid, messageType string, o discoveryMessage.Discov
 // --------------------------------------------------
 
 func printCollectionResponse(reqid, messageType string, o collectionMessage.CollectionResponseMessageType) {
-
-	if DebugLevel >= 4 {
-		log.Println("DEBUG: Entering printCollectionResponse")
-	}
 
 	PrintOutputHeader()
 	fmt.Println("Request")
@@ -191,10 +174,6 @@ func printCollectionResponse(reqid, messageType string, o collectionMessage.Coll
 // --------------------------------------------------
 
 func printPollResponse(reqid, messageType string, o pollMessage.PollResponseMessageType) {
-
-	if DebugLevel >= 4 {
-		log.Println("DEBUG: Entering printPollResponse")
-	}
 
 	PrintOutputHeader()
 	fmt.Println("Request")
