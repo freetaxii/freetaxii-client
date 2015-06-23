@@ -9,9 +9,9 @@ package lib
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/freetaxii/libtaxii/collectionMessage"
-	"github.com/freetaxii/libtaxii/discoveryMessage"
-	"github.com/freetaxii/libtaxii/pollMessage"
+	"github.com/freetaxii/libtaxii/messages/collectionMessage"
+	"github.com/freetaxii/libtaxii/messages/discoveryMessage"
+	"github.com/freetaxii/libtaxii/messages/pollMessage"
 	"io/ioutil"
 	"log"
 	"net/http"

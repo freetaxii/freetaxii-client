@@ -8,10 +8,10 @@ package lib
 
 import (
 	"encoding/json"
-	"github.com/freetaxii/libtaxii/collectionMessage"
-	"github.com/freetaxii/libtaxii/discoveryMessage"
-	"github.com/freetaxii/libtaxii/pollMessage"
-	"github.com/freetaxii/libtaxii/statusMessage"
+	"github.com/freetaxii/libtaxii/messages/collectionMessage"
+	"github.com/freetaxii/libtaxii/messages/discoveryMessage"
+	"github.com/freetaxii/libtaxii/messages/pollMessage"
+	"github.com/freetaxii/libtaxii/messages/statusMessage"
 	"log"
 )
 
